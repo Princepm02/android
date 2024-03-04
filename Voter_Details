@@ -1,0 +1,175 @@
+XML ---------------
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <EditText
+        android:id="@+id/nameBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Enter Name"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/cityBox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <AutoCompleteTextView
+        android:id="@+id/cityBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Select the city"
+        app:layout_constraintBottom_toTopOf="@+id/ageBox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/nameBox" />
+
+    <EditText
+        android:id="@+id/ageBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Enter Age"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/radioGroup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cityBox" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="123dp"
+        android:layout_height="96dp"
+        app:layout_constraintBottom_toTopOf="@+id/resetBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ageBox">
+
+        <RadioButton
+            android:id="@+id/radioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Male" />
+
+        <RadioButton
+            android:id="@+id/radioButton2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Female" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/resetBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reset"
+        app:layout_constraintBottom_toTopOf="@+id/result"
+        app:layout_constraintEnd_toEndOf="@id/submitBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/radioGroup" />
+
+    <Button
+        android:id="@+id/submitBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        app:layout_constraintBottom_toTopOf="@+id/result"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/resetBtn"
+        app:layout_constraintTop_toBottomOf="@id/radioGroup" />
+
+    <TextView
+        android:id="@+id/result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Result"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/submitBtn" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+MAIN ------------------------
+
+package com.example.voter;
+
+import androidx.appcompat.app.AppCompatActivity;
+import android.annotation.SuppressLint;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
+
+
+public class MainActivity extends AppCompatActivity {
+    EditText name, age;
+    TextView res;
+    AutoCompleteTextView places;
+    RadioGroup rg;
+    RadioButton gender;
+    Button submit,resetbutton;
+    String[] Locations = {"Bangalore","Delhi","Pune","Bombay","Chennai","Hyderabad","Calcutta"};
+    @SuppressLint("MissingInflatedId")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        places = findViewById(R.id.cityBox);
+        submit = findViewById(R.id.submitBtn);
+        name =findViewById(R.id.nameBox);
+        age =findViewById(R.id.ageBox);
+        res =findViewById(R.id.result);
+        resetbutton=findViewById(R.id.resetBtn);
+
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.select_dialog_item,Locations);
+        places.setThreshold(1);
+        places.setAdapter(adapter);
+        rg = findViewById(R.id.radioGroup);
+        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                gender = findViewById(checkedId);
+            }
+        });
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    String perName= name.getText().toString();
+                    int age = Integer.parseInt(MainActivity.this.age.getText().toString());
+                    if (age >= 18) {
+                        res.setText("name: "+perName+"\nfrom City: "+places.getText().toString()+"\ngender: "+ gender.getText()+"\nYou are eligible to vote!");
+                    } else {
+                        res.setText("name:"+perName+"\nfrom City: "+places.getText().toString()+"\ngender: "+ gender.getText()+"\nYou are not eligible to vote.");
+                    }
+
+                } catch (NumberFormatException e) {
+                    res.setText("Invalid age entered.");
+                }
+            }
+        });
+        resetbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                name.setText("");
+                age.setText("");
+                places.setText("");
+                rg.clearCheck();
+            }
+        });
+
+    }
+
+}
