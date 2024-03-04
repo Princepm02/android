@@ -1,0 +1,246 @@
+Main XML---------
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cake Bakery"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.116" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cake Flavour"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.21"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.25" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Date of Delivery"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.137"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.443" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Time of Delivery"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.124"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.667" />
+
+    <Button
+        android:id="@+id/orderBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Place Order"
+        android:onClick="placeOrder"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.934" />
+
+    <Spinner
+        android:id="@+id/cakeBox"
+        android:layout_width="183dp"
+        android:layout_height="34dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.89"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.242" />
+
+    <ImageView
+        android:id="@+id/calendar"
+        android:layout_width="140dp"
+        android:layout_height="137dp"
+        android:contentDescription="Enter Date"
+        android:onClick="selectDate"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.826"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.429"
+        app:srcCompat="@drawable/calendar" />
+
+    <ImageView
+        android:id="@+id/clock"
+        android:layout_width="139dp"
+        android:layout_height="128dp"
+        android:contentDescription="Enter Time"
+        android:onClick="selectTime"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.823"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.703"
+        app:srcCompat="@drawable/clock" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+Main--------
+
+package com.example.cake_order;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
+import android.widget.Spinner;
+import android.widget.TimePicker;
+
+import java.util.Calendar;
+
+public class MainActivity extends AppCompatActivity {
+    Spinner cakeItem;
+    String[] cakes = {"Vanilla","Red Velvet","Chocolate","Strawberry","Butterscotch"};
+    String c_flavour,datedel,timedel;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        cakeItem = findViewById(R.id.cakeBox);
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item,cakes);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        cakeItem.setAdapter(adapter);
+        cakeItem.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                c_flavour = parent.getItemAtPosition(position).toString();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+    }
+    public void selectDate(View v){
+        Calendar c = Calendar.getInstance();
+        int pYear = c.get(Calendar.YEAR);
+        int pMonth = c.get(Calendar.MONTH);
+        int pDate = c.get(Calendar.DATE);
+        DatePickerDialog dialog = new DatePickerDialog(this,
+                android.R.style.Theme_DeviceDefault_DialogWhenLarge, new
+                DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        datedel = dayOfMonth+"/"+(month+1)+"/"+year;
+                    }
+                },pYear,pMonth,pDate);
+        dialog.show();
+    }
+
+    public void selectTime(View v){
+        Calendar c1 = Calendar.getInstance();
+        int pHour = c1.get(Calendar.HOUR);
+        int pMinute = c1.get(Calendar.MINUTE);
+        TimePickerDialog tdialog = new TimePickerDialog(this,
+                android.R.style.Theme_DeviceDefault_DialogWhenLarge,
+                new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        timedel = hourOfDay+":"+minute;
+                    }
+                },pHour,pMinute,false);
+        tdialog.show();
+    }
+    public void placeOrder(View v) {
+        Intent in = new Intent(getApplicationContext(), OrderActivity.class);
+        in.putExtra("ITEM",c_flavour);
+        in.putExtra("DATE",datedel);
+        in.putExtra("TIME",timedel);
+        startActivity(in);
+    }
+}
+
+
+activity_order.xml ------------
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".OrderActivity">
+
+    <TextView
+        android:id="@+id/result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+OrderActivity.java------------
+
+package com.example.cake_order;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.TextView;
+
+public class OrderActivity extends AppCompatActivity {
+    TextView res;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_order);
+        res = findViewById(R.id.result);
+        Intent intt = getIntent();
+        String cakeFlavour = intt.getStringExtra("ITEM");
+        String dated = intt.getStringExtra("DATE");
+        String timed = intt.getStringExtra("TIME");
+        res.setText("Your Order Placed Successfully.\nYour "+cakeFlavour+" cake will be delivered \non "+
+                dated+"\nat "+timed);
+    }
+}
