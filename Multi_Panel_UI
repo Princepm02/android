@@ -1,0 +1,197 @@
+activity_main.xml -----------------------------------------------
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Student Details"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.103" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerView"
+        android:name="com.example.multi_panel_ui.DetailsFragment"
+        android:layout_width="175dp"
+        android:layout_height="473dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.894"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ListView
+        android:id="@+id/studentList"
+        android:layout_width="178dp"
+        android:layout_height="473dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.068"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+MainActivity.java --------------------------------------------
+
+package com.example.multi_panel_ui;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.FragmentManager;
+
+public class MainActivity extends AppCompatActivity {
+    ListView list;
+    String Stname[]={"ANKUSH","PRINCE","KSHITIJ","TEJAS","PIYANSHU","SURAJ","FIRDOSH","VINEET"};
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_main);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        list = findViewById(R.id.studentList);
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,Stname);
+        list.setAdapter(adapter);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                DetailsFragment frag;
+                FragmentManager fm = getSupportFragmentManager();
+                frag = (DetailsFragment)fm.findFragmentById(R.id.fragmentContainerView);
+                frag.change(position);  //change() is user defined function. Check DetailsFragment.java
+            }
+        });
+    }
+}
+
+
+fragment_details.xml ---------------------------------------
+
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DetailsFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/result"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textAlignment="center"
+        android:gravity="center_vertical"
+        android:text="Name : \nSection Number : "
+        android:textStyle="bold"
+        android:textSize="18sp"
+        tools:ignore="RtlCompat" />
+
+</FrameLayout>
+
+
+DetailsFragment.java -------------------------------------------
+
+package com.example.multi_panel_ui;
+
+import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link DetailsFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class DetailsFragment extends Fragment {
+
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
+
+    String Stname[] = {"ANKUSH","PRINCE","KSHITIJ","TEJAS","PIYANSHU","SURAJ","FIRDOSH","VINEET"}; //included
+    String Section[] = {"8CSE7","8CSE8","8CSE9","8CSE10","8CSE11","8CSE12","8CSE13","8CSE14"}; //included
+    TextView res; //included
+
+    public DetailsFragment() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment DetailsFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static DetailsFragment newInstance(String param1, String param2) {
+        DetailsFragment fragment = new DetailsFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        //included
+        View v = inflater.inflate(R.layout.fragment_details, container, false);
+        res = v.findViewById(R.id.result);
+        return v;
+    }
+    //included
+    public void change(int position){
+        res.setText("Name: "+Stname[position]+"\nSection Number: "+Section[position]);
+    }
+
+}
