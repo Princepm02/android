@@ -1,0 +1,153 @@
+Usage of DatePicker and TimePicker
+Design an app to order a cake using date picker and Time picker.
+String XML file
+<resources>
+    <string name="app_name">CakeOrderwithoutIntent</string>
+    <string-array name="cake_flavors">
+        <item>Chocolate</item>
+        <item>Vanilla</item>
+        <item>Strawberry</item>
+        <!-- Add more flavors as needed -->
+    </string-array>
+</resources>
+
+
+Activity_main.xml
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <DatePicker
+        android:id="@+id/datePicker"
+        android:layout_width="410dp"
+        android:layout_height="235dp"
+        android:layout_centerHorizontal="true"
+        android:calendarViewShown="true"
+        android:datePickerMode="spinner"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.333"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.019" />
+
+    <TimePicker
+        android:id="@+id/timePicker"
+        android:layout_width="371dp"
+        android:layout_height="314dp"
+        android:layout_below="@id/datePicker"
+        android:layout_centerHorizontal="true"
+        android:timePickerMode="clock"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.364"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.523" />
+
+    <Spinner
+        android:id="@+id/flavorSpinner"
+        android:layout_width="344dp"
+        android:layout_height="20dp"
+        android:layout_below="@id/timePicker"
+        android:entries="@array/cake_flavors"
+        android:hint="Select Cake Flavor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.537"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.786" />
+
+    <Button
+        android:id="@+id/orderButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/flavorSpinner"
+        android:layout_centerHorizontal="true"
+        android:text="Place Order"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.877" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.524"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.962" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+MainActivity.java
+
+
+package com.example.cakeorderwithoutintent;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        DatePicker datePicker = findViewById(R.id.datePicker);
+        TimePicker timePicker = findViewById(R.id.timePicker);
+        Spinner flavorSpinner = findViewById(R.id.flavorSpinner);
+        TextView tv=findViewById(R.id.textView);
+        // Populate the Spinner with cake flavors
+        ArrayAdapter<CharSequence> flavorAdapter = ArrayAdapter.createFromResource(this,R.array.cake_flavors,android.R.layout.simple_spinner_item);
+        flavorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        flavorSpinner.setAdapter(flavorAdapter);
+
+        Button orderButton = findViewById(R.id.orderButton);
+        orderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int day = datePicker.getDayOfMonth();
+                int month = datePicker.getMonth() + 1; // Month is zero-based
+                int year = datePicker.getYear();
+
+                int hour = timePicker.getHour();
+                int minute = timePicker.getMinute();
+
+                String selectedFlavor = flavorSpinner.getSelectedItem().toString();
+
+
+                String orderMessage = String.format("Order placed for %s cake on %02d/%02d/%04d at %02d:%02d",selectedFlavor, day, month, year, hour, minute);
+               // Toast.makeText(MainActivity.this, orderMessage, Toast.LENGTH_LONG).show();
+                tv.setText(orderMessage);
+            }
+        });
+    }
+}
+
