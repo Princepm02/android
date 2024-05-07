@@ -1,0 +1,138 @@
+mainXML---------------------------------------------------------
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/CheckBtn"
+        android:layout_width="168dp"
+        android:layout_height="59dp"
+        android:text="Check Battery %"
+        app:layout_constraintBottom_toTopOf="@id/Result"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/Result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/CheckBtn"
+        app:layout_constraintBottom_toTopOf="@id/pBar"/>
+
+    <ProgressBar
+        android:id="@+id/pBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="349dp"
+        android:layout_height="53dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/Result"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+MainActivity.java-------------------------------------------------------
+
+package com.example.battery;
+
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class MainActivity extends AppCompatActivity {
+    Button check;
+    TextView tv;
+    ProgressBar bar;
+    BatteryReciever br;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        check = findViewById(R.id.CheckBtn);
+        tv = findViewById(R.id.Result);
+        bar = findViewById(R.id.pBar);
+        check.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                br = new BatteryReciever(tv,bar);
+                IntentFilter it = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+                registerReceiver(br,it);
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(br);
+    }
+}
+
+(New -> Java Class -> Class -> BatteryReceiver)
+BatteryReceiver.java--------------------------------------------------------------
+
+
+package com.example.battery;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.os.Build;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import androidx.annotation.RequiresApi;
+
+public class BatteryReciever extends BroadcastReceiver {
+    TextView res;
+    ProgressBar prg;
+    BatteryReciever(TextView t,ProgressBar p){
+        res = t;
+        prg = p;
+    }
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        int per = intent.getIntExtra("level",0);
+        if(per>=75){
+            res.setText("percentage:" + per);
+            prg.setProgress(per);
+            prg.setProgressTintList(ColorStateList.valueOf(Color.GREEN));
+        } else if (per>=50 && per<75) {
+            res.setText("percentage: "+ per);
+            prg.setProgress(per);
+            prg.setProgressTintList(ColorStateList.valueOf(Color.YELLOW));
+        } else if (per<50) {
+            res.setText("percentage: "+ per);
+            prg.setProgress(per);
+            prg.setProgressTintList(ColorStateList.valueOf(Color.RED));
+            }
+
+        }
+
+
+    }
+
