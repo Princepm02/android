@@ -62,7 +62,9 @@ activity_main.xml----------------------------
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
-
+(app -> java -> com.example -> New -> Service -> Service -> MyService)
+(res -> Android Resource Directory -> Resource type = raw -> OK)
+(now paste the music mp3 file under res -> raw Directory)
 
 MainActivity.java-------------------------------------
 
