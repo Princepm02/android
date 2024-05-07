@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
     }
 }
 
-
+(New -> Java Class -> Class -> MyDBHandler.java)
 MyDBHandler.java-------------------------------------------------------------------
 
 package com.example.mydbhandler;
