@@ -339,41 +339,42 @@ public class ResultActivity extends AppCompatActivity {
         String ph = it1.getStringExtra("Phno");
         String c = it1.getStringExtra("City");
         String s = it1.getStringExtra("Sub");
+
         da.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Calendar cal = Calendar.getInstance();
-                int cY = cal.get(Calendar.YEAR);
-                int cM = cal.get(Calendar.MONTH);
-                int cD = cal.get(Calendar.DATE);
+            public void onClick(View v) {
+                Calendar c = Calendar.getInstance();
+                int pYear = c.get(Calendar.YEAR);
+                int pMonth = c.get(Calendar.MONTH);
+                int pDate = c.get(Calendar.DATE);
+
                 DatePickerDialog dialog = new DatePickerDialog(ResultActivity.this,
-                        android.R.style.Theme_DeviceDefault_DialogWhenLarge, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                        sdate = i2 + "/" + (i1 + 1) + "/" + i;
-                        da.setText(sdate);
-                    }
-                }, cY, cM, cD);
+                        android.R.style.Theme_DeviceDefault_DialogWhenLarge,
+                        (view, year, month, dayOfMonth) -> {
+                            sdate = dayOfMonth + "/" + (month + 1) + "/" + year;
+                            da.setText(sdate);
+                        }, pYear, pMonth, pDate);
                 dialog.show();
             }
         });
+
         ti.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Calendar cal = Calendar.getInstance();
-                int cH = cal.get(Calendar.HOUR);
-                int cMi = cal.get(Calendar.MINUTE);
-                TimePickerDialog dialog = new TimePickerDialog(ResultActivity.this,
-                        android.R.style.Theme_DeviceDefault_DialogWhenLarge, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                        stime = i + ":" + i1;
-                        ti.setText(stime);
-                    }
-                }, cH, cMi, false);
-                dialog.show();
+                int cHour = cal.get(Calendar.HOUR);
+                int cMinute = cal.get(Calendar.MINUTE);
+                TimePickerDialog timePickerDialog = new TimePickerDialog(ResultActivity.this,
+                        android.R.style.Theme_DeviceDefault_DialogWhenLarge,
+                        (timePicker, hourOfDay, minute) -> {
+                            stime = hourOfDay + ":" + minute;
+                            ti.setText(stime);
+                        }, cHour, cMinute, false);
+                timePickerDialog.show();
             }
         });
+
+
         con.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -404,7 +405,6 @@ public class ResultActivity extends AppCompatActivity {
         });
     }
 }
-
 
 DBH.java-----------------------------------------------------------------
 
