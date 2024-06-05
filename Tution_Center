@@ -169,8 +169,8 @@ public class MainActivity extends AppCompatActivity {
         dsa = findViewById(R.id.dsaBox);
         btn = findViewById(R.id.submitBtn);
         ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.select_dialog_item, cities);
-        cityVal.setAdapter(aa);
         cityVal.setThreshold(1);
+        cityVal.setAdapter(aa);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
