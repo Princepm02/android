@@ -1,0 +1,484 @@
+activity_main.xml------------------------------------------------------------
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/nameBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Enter name"
+        android:inputType="text"
+        android:minHeight="48dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/phnoBox"/>
+    <EditText
+        android:id="@+id/phnoBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Enter Phone Number"
+        android:inputType="number"
+        android:minHeight="48dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nameBox"
+        app:layout_constraintBottom_toTopOf="@+id/cityBox"/>
+    <AutoCompleteTextView
+        android:id="@+id/cityBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Select City"
+        android:minHeight="48dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/phnoBox"
+        app:layout_constraintBottom_toTopOf="@+id/jBox"/>
+    <CheckBox
+        android:id="@+id/jBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Java"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/dsBox"
+        app:layout_constraintTop_toBottomOf="@+id/cityBox"
+        app:layout_constraintBottom_toTopOf="@+id/pBox"/>
+    <CheckBox
+        android:id="@+id/pBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Python"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/dsaBox"
+        app:layout_constraintTop_toBottomOf="@+id/jBox"
+        app:layout_constraintBottom_toTopOf="@+id/jsBox" />
+    <CheckBox
+        android:id="@+id/jsBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Java Script"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/mlBox"
+        app:layout_constraintTop_toBottomOf="@+id/pBox"
+        app:layout_constraintBottom_toTopOf="@+id/madBox" />
+    <CheckBox
+        android:id="@+id/dsBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Data Structure"
+        app:layout_constraintStart_toEndOf="@+id/jBox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cityBox"
+        app:layout_constraintBottom_toTopOf="@+id/dsaBox"/>
+    <CheckBox
+        android:id="@+id/dsaBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Data Science"
+        app:layout_constraintStart_toEndOf="@+id/pBox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dsBox"
+        app:layout_constraintBottom_toTopOf="@+id/mlBox" />
+    <CheckBox
+        android:id="@+id/mlBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Machine Learning"
+        app:layout_constraintStart_toEndOf="@+id/jsBox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dsaBox"
+        app:layout_constraintBottom_toTopOf="@+id/madBox" />
+    <CheckBox
+        android:id="@+id/madBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mobile Application Development"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/jsBox"
+        app:layout_constraintBottom_toTopOf="@+id/submitBtn"/>
+    <Button
+        android:id="@+id/submitBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/madBox"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+MainActivity.java--------------------------------------------------------------------------------
+
+package com.example.tution_center;
+
+import android.os.Bundle;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import android.content.Intent;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+
+public class MainActivity extends AppCompatActivity {
+    EditText nameVal, phnoVal;
+    AutoCompleteTextView cityVal;
+    CheckBox j, js, p, ml, mad, ds, dsa;
+    Button btn;
+    String[] cities = {"Bangalore", "Chennai", "Delhi", "Hyderabad"};
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_main);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        nameVal = findViewById(R.id.nameBox);
+        phnoVal = findViewById(R.id.phnoBox);
+        cityVal = findViewById(R.id.cityBox);
+        j = findViewById(R.id.jBox);
+        js = findViewById(R.id.jsBox);
+        p = findViewById(R.id.pBox);
+        ml = findViewById(R.id.mlBox);
+        mad = findViewById(R.id.madBox);
+        ds = findViewById(R.id.dsBox);
+        dsa = findViewById(R.id.dsaBox);
+        btn = findViewById(R.id.submitBtn);
+        ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.select_dialog_item, cities);
+        cityVal.setAdapter(aa);
+        cityVal.setThreshold(1);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                StringBuilder sub = new StringBuilder("");
+                if (j.isChecked())
+                    sub.append("Java");
+                if (js.isChecked())
+                    sub.append("Java Script");
+                if (p.isChecked())
+                    sub.append("Python");
+                if (ds.isChecked())
+                    sub.append("Data Structures");
+                if (dsa.isChecked())
+                    sub.append("Data Science");
+                if (ml.isChecked())
+                    sub.append("Machine Learning");
+                if (mad.isChecked())
+                    sub.append("Mobile Application Development");
+                Intent it = new Intent(MainActivity.this, ResultActivity.class);
+                it.putExtra("Name", nameVal.getText().toString());
+                it.putExtra("Phno", phnoVal.getText().toString());
+                it.putExtra("City", cityVal.getText().toString());
+                it.putExtra("Sub", sub.toString());
+                startActivity(it);
+            }
+        });
+    }
+}
+
+
+activty_result.xml------------------------------------------------------------------
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ResultActivity">
+
+    <EditText
+        android:id="@+id/datebox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Select Date"
+        android:inputType="date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/timeBox"/>
+    <EditText
+        android:id="@+id/timeBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Select Time"
+        android:inputType="time"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/datebox"
+        app:layout_constraintBottom_toTopOf="@+id/confirmBtn"/>
+    <Button
+        android:id="@+id/confirmBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Confirm"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timeBox"
+        app:layout_constraintBottom_toTopOf="@+id/dis2Box"/>
+    <Button
+        android:id="@+id/dis1Box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Display1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/dis2Box"
+        app:layout_constraintTop_toBottomOf="@+id/confirmBtn"
+        app:layout_constraintBottom_toTopOf="@+id/Result"/>
+    <Button
+        android:id="@+id/dis2Box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Display2"
+        app:layout_constraintStart_toEndOf="@+id/dis1Box"
+        app:layout_constraintEnd_toStartOf="@+id/dis3Box"
+        app:layout_constraintTop_toBottomOf="@+id/confirmBtn"
+        app:layout_constraintBottom_toTopOf="@+id/Result"/>
+    <Button
+        android:id="@+id/dis3Box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Display3"
+        app:layout_constraintStart_toEndOf="@id/dis2Box"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/confirmBtn"
+        app:layout_constraintBottom_toTopOf="@+id/Result"/>
+    <TextView
+        android:id="@+id/Result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dis2Box"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+ResultActivity.java-------------------------------------------------------------
+
+package com.example.tution_center;
+
+import android.os.Bundle;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.content.Intent;
+
+import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
+
+import java.util.Calendar;
+
+public class ResultActivity extends AppCompatActivity {
+    EditText da, ti;
+    Button con, dis1, dis2, dis3;
+    TextView res;
+    DBH db;
+    String sdate, stime;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_result);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        da = findViewById(R.id.datebox);
+        ti = findViewById(R.id.timeBox);
+        con = findViewById(R.id.confirmBtn);
+        dis1 = findViewById(R.id.dis1Box);
+        dis2 = findViewById(R.id.dis2Box);
+        dis3 = findViewById(R.id.dis3Box);
+        res = findViewById(R.id.Result);
+        db = new DBH(this, "TuitionDb", null, 1);
+        Intent it1 = getIntent();
+        String n = it1.getStringExtra("Name");
+        String ph = it1.getStringExtra("Phno");
+        String c = it1.getStringExtra("City");
+        String s = it1.getStringExtra("Sub");
+        da.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar cal = Calendar.getInstance();
+                int cY = cal.get(Calendar.YEAR);
+                int cM = cal.get(Calendar.MONTH);
+                int cD = cal.get(Calendar.DATE);
+                DatePickerDialog dialog = new DatePickerDialog(ResultActivity.this,
+                        android.R.style.Theme_DeviceDefault_DialogWhenLarge, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                        sdate = i2 + "/" + (i1 + 1) + "/" + i;
+                        da.setText(sdate);
+                    }
+                }, cY, cM, cD);
+                dialog.show();
+            }
+        });
+        ti.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar cal = Calendar.getInstance();
+                int cH = cal.get(Calendar.HOUR);
+                int cMi = cal.get(Calendar.MINUTE);
+                TimePickerDialog dialog = new TimePickerDialog(ResultActivity.this,
+                        android.R.style.Theme_DeviceDefault_DialogWhenLarge, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int i, int i1) {
+                        stime = i + ":" + i1;
+                        ti.setText(stime);
+                    }
+                }, cH, cMi, false);
+                dialog.show();
+            }
+        });
+        con.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                db.insertRecord(n, ph, c, s, sdate, stime);
+                Toast.makeText(ResultActivity.this, "Inserted", Toast.LENGTH_LONG).show();
+            }
+        });
+        dis1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String rec = db.displayRecord1(n);
+                res.setText(rec);
+            }
+        });
+        dis2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int ct = db.displayRecord2(c);
+                res.setText(String.valueOf(ct));
+            }
+        });
+        dis3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String rec = db.displayRecord3(sdate);
+                res.setText(rec);
+            }
+        });
+    }
+}
+
+
+DBH.java-----------------------------------------------------------------
+
+package com.example.tution_center;
+
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+import androidx.annotation.Nullable;
+
+public class DBH extends SQLiteOpenHelper {
+    public DBH(@Nullable Context context, @Nullable String name, @Nullable
+    SQLiteDatabase.CursorFactory factory, int version) {
+        super(context, name, factory, version);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        sqLiteDatabase.execSQL("create table tc(name varchar(20),phno varchar(20),city varchar(20),sub varchar(100), date varchar(20), time varchar(20)); ");
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+    }
+
+    public void insertRecord(String n, String p, String c, String s, String d, String t) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("insert into tc values(?,?,?,?,?,?)", new String[]{n, p, c, s, d, t});
+        db.close();
+    }
+
+    public String displayRecord1(String n) {
+        String td = "";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cr = db.rawQuery("select * from tc where name=?", new String[]{n});
+        while (cr.moveToNext()) {
+            String na = cr.getString(0);
+            String p = cr.getString(1);
+            String c = cr.getString(2);
+            String s = cr.getString(3);
+            String d = cr.getString(4);
+            String t = cr.getString(5);
+            td += na + "\t" + p + "\t" + c + "\t" + s + "\t" + d + "\t" + t + "\n";
+        }
+        db.close();
+        return td;
+    }
+
+    public int displayRecord2(String c) {
+        int ct = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cr = db.rawQuery("select * from tc where city = ?", new String[]{c});
+        while (cr.moveToNext())
+            ct++;
+        db.close();
+        return ct;
+    }
+
+    public String displayRecord3(String d) {
+        String td = "";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cr = db.rawQuery("select * from tc where date=?", new String[]{d});
+        while (cr.moveToNext()) {
+            String na = cr.getString(0);
+            String p = cr.getString(1);
+            String c = cr.getString(2);
+            String s = cr.getString(3);
+            String da = cr.getString(4);
+            String t = cr.getString(5);
+            td += na + "\t" + p + "\t" + c + "\t" + s + "\t" + da + "\t" + t + "\n";
+        }
+        db.close();
+        return td;
+    }
+}
